@@ -29,3 +29,7 @@ views:
             - entity_id: "device_tracker.gps_*"
               options:
                 secondary_info: last-changed
+      # Vista della cartella dei file di tracking giornalieri
+      - type: markdown
+        title: "File di tracking giornalieri"
+        content: "Cartella {{ state_attr('sensor.gps_tracking_files','directory') }} - {{ states('sensor.gps_tracking_files') }} file ({{ state_attr('sensor.gps_tracking_files','total_kb') }} KB). Elenco: {{ (state_attr('sensor.gps_tracking_files','file_list') or []) | join('  |  ') }}"
