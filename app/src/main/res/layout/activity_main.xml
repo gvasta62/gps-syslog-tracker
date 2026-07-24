@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Schermata di configurazione. E' dentro uno ScrollView cosi' e' scorrevole
+     anche su schermi piccoli. -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="GPS Syslog Tracker"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:paddingBottom="12dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nome host del device (inizio della riga syslog):" />
+        <EditText
+            android:id="@+id/etHostname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="es. smartphone-01" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Server syslog (IP o URL):"
+            android:paddingTop="8dp" />
+        <EditText
+            android:id="@+id/etHost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textUri"
+            android:hint="es. 192.168.1.100" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Porta:"
+            android:paddingTop="8dp" />
+        <EditText
+            android:id="@+id/etPort"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="514" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Protocollo:"
+            android:paddingTop="8dp" />
+        <RadioGroup
+            android:id="@+id/rgProto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/rbUdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="UDP (RFC 3164)"
+                android:checked="true" />
+            <RadioButton
+                android:id="@+id/rbTcp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:text="TCP (RFC 5424)" />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Intervallo di invio (secondi):"
+            android:paddingTop="8dp" />
+        <EditText
+            android:id="@+id/etInterval"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="10" />
+
+        <CheckBox
+            android:id="@+id/cbGsv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:checked="true"
+            android:text="Invia dettaglio satelliti (frasi \$GPGSV)" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Salva impostazioni" />
+
+        <Button
+            android:id="@+id/btnStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Avvia servizio" />
+
+        <Button
+            android:id="@+id/btnStop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ferma servizio" />
+
+        <Button
+            android:id="@+id/btnPerms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Concedi permessi" />
+
+        <Button
+            android:id="@+id/btnBattery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Escludi dal risparmio energetico" />
+
+        <Button
+            android:id="@+id/btnLog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mostra log" />
+
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:fontFamily="monospace"
+            android:textSize="12sp"
+            android:text="Stato: -" />
+
+    </LinearLayout>
+</ScrollView>

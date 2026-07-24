@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Rete: necessaria per inviare i dati al server syslog. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Posizione (fine + approssimata). -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- Posizione anche quando l'app e' in background (Android 10+). -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <!-- Servizio in primo piano (foreground) sempre attivo. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- Tipo "location" del servizio in primo piano (Android 14+). -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+
+    <!-- Riavvio automatico dopo il riavvio del telefono. -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- Mantiene la CPU sveglia per continuare a inviare durante il Doze. -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Notifiche (Android 13+). -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Chiedere l'esclusione dal risparmio energetico. -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.GpsSyslog">
+
+        <!-- Schermata delle impostazioni (host, porta, protocollo, intervallo). -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Il servizio che raccoglie la posizione e invia al syslog. -->
+        <service
+            android:name=".LocationService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="location" />
+
+        <!-- Riavvia il servizio dopo il boot del telefono. -->
+        <receiver
+            android:name=".BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Riavvia il servizio dopo un crash o dopo la rimozione dai recenti. -->
+        <receiver
+            android:name=".RestartReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+    </application>
+</manifest>

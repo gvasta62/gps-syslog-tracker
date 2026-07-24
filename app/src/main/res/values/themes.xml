@@ -1,0 +1,4 @@
+<resources>
+    <!-- Tema base dell'app: si adatta a modalita' chiara/scura del telefono. -->
+    <style name="Theme.GpsSyslog" parent="Theme.AppCompat.DayNight.DarkActionBar" />
+</resources>
