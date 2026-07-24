@@ -15,14 +15,18 @@ views:
         filter:
           include:
             - entity_id: "device_tracker.gps_*"
-      # Elenco mezzi attivi: anch'esso automatico
+      # Riepilogo multimezzo: tabella dinamica (tutti i mezzi, una riga ciascuno)
+      - type: markdown
+        title: "Riepilogo mezzi"
+        content: "| Mezzo | km/h | Sat | Prec (m) | Agg. |\n| --- | --- | --- | --- | --- |\n{% for e in states.device_tracker if e.entity_id.startswith('device_tracker.gps_') %}| {{ e.attributes.friendly_name | default(e.entity_id) }} | {{ e.attributes.speed_kmh | default('-') }} | {{ e.attributes.sats_used | default('-') }} | {{ (e.attributes.gps_accuracy | default(0)) | round(0) }} | {{ relative_time(e.last_updated) }} |\n{% endfor %}"
+      # Elenco cliccabile: apri il singolo mezzo per storico/dettagli
       - type: custom:auto-entities
         show_empty: true
         sort:
           method: name
         card:
           type: entities
-          title: "Mezzi attivi"
+          title: "Apri un mezzo"
           state_color: true
         filter:
           include:
