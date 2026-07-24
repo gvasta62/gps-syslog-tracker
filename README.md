@@ -163,6 +163,13 @@ sono piu' di 4, vengono emesse piu' righe `$GPGSV` consecutive.
 Quindi ad ogni intervallo l'app invia: **1×`$GPRMC` + 1×`$GPGGA` + N×`$GPGSV`**
 (N dipende dal numero di satelliti in vista).
 
+## Lato server: collector che decodifica il NMEA
+
+Nella cartella **[`server/`](server/)** trovi un **collector Python** che riceve
+i messaggi syslog, valida e decodifica le frasi NMEA e fa **atterrare** il dato
+in una destinazione a scelta (**console, CSV, JSON, InfluxDB, Postgres/PostGIS,
+Home Assistant, MQTT**). Vedi [`server/README.md`](server/README.md).
+
 ## Compilare l'APK
 
 Il progetto e' un normale progetto **Gradle + Kotlin**, apribile in **Android
