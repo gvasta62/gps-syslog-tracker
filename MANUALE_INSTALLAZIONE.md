@@ -103,41 +103,84 @@ motivo n.1 per cui un servizio smette di funzionare dopo qualche ora. Applica le
 impostazioni relative alla tua marca. Il sito **dontkillmyapp.com** ha guide
 aggiornate marca per marca.
 
+**Regola universale (vale per tutti)**: *Impostazioni → App → GPS Syslog
+Tracker → Batteria → **Senza restrizioni / Non ottimizzata***. Poi applica le
+voci specifiche del produttore qui sotto (autostart + blocco nei recenti).
+
 ### Xiaomi / Redmi / POCO (MIUI / HyperOS)
 - *Impostazioni → App → Gestisci app → GPS Syslog Tracker*:
   - **Avvio automatico**: ATTIVA.
   - **Risparmio batteria** → **Nessuna restrizione**.
-- *Impostazioni → Batteria → (ingranaggio) → Prestazioni*: disattiva
-  l'ottimizzazione per questa app.
-- Nei **Recenti**: tieni premuta l'app → icona **lucchetto** (la blocca cosi'
-  non viene chiusa dallo "svuota tutto").
-
-### Huawei / Honor (EMUI)
-- *Impostazioni → Batteria → Avvio app*: trova l'app, **disattiva "Gestione
-  automatica"** e attiva manualmente **Avvio automatico**, **Avvio secondario**,
-  **Esecuzione in background**.
-- *Impostazioni → Batteria → Altro → Non chiudere dopo blocco schermo*.
-
-### OPPO / Realme / OnePlus (ColorOS / OxygenOS)
-- *Impostazioni → Batteria → (Uso batteria in background / Ottimizzazione)*:
-  imposta l'app su **Non ottimizzare / Consenti attivita' in background**.
-- *Impostazioni → App → GPS Syslog Tracker → Avvio automatico*: ATTIVA.
-- Nei Recenti: blocca l'app (lucchetto).
-
-### Vivo / iQOO (Funtouch OS)
-- *Impostazioni → Batteria → Consumo elevato in background*: consenti per l'app.
-- *Impostazioni → App → Avvio automatico*: ATTIVA per l'app.
+- *Impostazioni → Batteria → (ingranaggio in alto) → Prestazioni/Attivita' in
+  background*: nessuna restrizione per l'app.
+- **Recenti**: tieni premuta l'app (o trascinala in basso) → icona **lucchetto**
+  (la blocca contro lo "svuota tutto").
+- Su alcuni MIUI: *Impostazioni → Batteria → Risparmio energetico app* →
+  imposta l'app su **Nessuna restrizione**.
 
 ### Samsung (One UI)
 - *Impostazioni → App → GPS Syslog Tracker → Batteria → **Senza restrizioni***.
-- *Impostazioni → Batteria → Limiti uso in background → **App inattive/in
-  sospensione***: assicurati che l'app **NON** sia nell'elenco; se c'e',
-  rimuovila.
-- Disattiva eventuale *"Rimuovi app inutilizzate"*.
+- *Impostazioni → Batteria → Limiti uso in background → **App in sospensione*** e
+  **App in sospensione profonda**: assicurati che l'app **NON** sia negli
+  elenchi; se c'e', rimuovila.
+- Disattiva *"Rimuovi automaticamente app inutilizzate"* (in App → menu).
 
-### Android "puro" (Pixel, Motorola, Nokia, ecc.)
+### Huawei (EMUI) / Honor (MagicOS)
+- *Impostazioni → Batteria → Avvio app* (o *Avvio automatico*): trova l'app,
+  **disattiva "Gestione automatica"** e attiva manualmente **Avvio automatico**,
+  **Avvio secondario**, **Esecuzione in background**.
+- *Impostazioni → Batteria → Altro/Impostazioni batteria → Non chiudere dopo il
+  blocco schermo*.
+- Nei Recenti: **lucchetto** sull'app.
+
+### OPPO / Realme (ColorOS / Realme UI)
+- *Impostazioni → Batteria → Utilizzo batteria in background* → l'app su
+  **Consenti attivita' in background / Non ottimizzare**.
+- *Impostazioni → App → Gestione avvio automatico* → **ATTIVA** per l'app.
+- Recenti: tieni premuta l'app → **blocca** (lucchetto).
+
+### OnePlus (OxygenOS)
+- *Impostazioni → Batteria → Ottimizzazione batteria* → app su **Non
+  ottimizzare**.
+- *Impostazioni → Batteria → Gestione avanzata / Sonno app profondo*: **escludi**
+  l'app.
+- *Impostazioni → App → Avvio automatico*: ATTIVA. Recenti: **blocca** l'app.
+
+### Vivo / iQOO (Funtouch OS / OriginOS)
+- *Impostazioni → Batteria → Consumo elevato in background*: **consenti** l'app.
+- *Impostazioni → Batteria → Avvio automatico in background* / *Impostazioni →
+  App → Avvio automatico*: **ATTIVA** per l'app.
+- Recenti: **blocca** l'app.
+
+### Motorola (My UX / near-stock)
 - *Impostazioni → App → GPS Syslog Tracker → Batteria → **Senza restrizioni***.
-- Di solito i passi 5 e 6 bastano.
+- Se presente **Moto → funzioni batteria adattiva**: escludi l'app.
+- Di solito bastano questo + i passi 5 e 6.
+
+### Google Pixel (Android "puro")
+- *Impostazioni → App → GPS Syslog Tracker → Batteria → **Senza restrizioni***.
+- *Impostazioni → Batteria → Batteria adattiva*: se serve massima continuita',
+  valuta di **disattivarla** (o affidati a "Senza restrizioni" sull'app).
+
+### Nokia / HMD, Sony (Android near-stock)
+- *Impostazioni → App → GPS Syslog Tracker → Batteria → **Senza restrizioni***.
+- **Sony**: disattiva **STAMINA** per l'app (o escludila).
+
+### Asus (ZenUI / ROG)
+- *Impostazioni → Gestione alimentazione / Mobile Manager → Avvio automatico*:
+  **consenti** l'app.
+- App → Batteria → **Senza restrizioni**. Recenti: **blocca** l'app.
+
+### Telefoni de-Googled (LineageOS, /e/OS, GrapheneOS, Fairphone)
+- Nessun "risparmio aggressivo" del produttore: bastano i passi 5 (posizione
+  "Consenti sempre") e 6 (esclusione batteria). Su GrapheneOS controlla che
+  l'app non sia messa in pausa quando inattiva.
+
+> **Suggerimento**: dopo aver applicato tutto, blocca lo schermo, lascia il
+> telefono fermo ~30-60 min e verifica che i dati continuino ad arrivare (mappa
+> HA / log dell'app). Se dopo un po' si ferma, e' quasi sempre una voce di
+> autostart/batteria del produttore rimasta attiva. Riferimento sempre valido:
+> **dontkillmyapp.com** (guide aggiornate marca per marca).
 
 ---
 
