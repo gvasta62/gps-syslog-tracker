@@ -1,0 +1,23 @@
+title: "Mezzi GPS"
+views:
+  - title: "Mezzi GPS"
+    path: mezzi-gps
+    icon: mdi:bus
+    cards:
+      # Mappa NATIVA: elenca i mezzi a mano (aggiungi una riga per ogni nuovo mezzo).
+      - type: map
+        title: "Posizione mezzi"
+        default_zoom: 12
+        hours_to_show: 4
+        entities:
+          - device_tracker.gps_lucia
+          # - device_tracker.gps_bus_01
+          # - device_tracker.gps_bus_02
+      # Riepilogo multimezzo: tabella AUTOMATICA (tutti i gps_*), nativa.
+      - type: markdown
+        title: "Riepilogo mezzi"
+        content: "| Mezzo | km/h | Sat | Prec (m) | Agg. |\n| --- | --- | --- | --- | --- |\n{% for e in states.device_tracker if e.entity_id.startswith('device_tracker.gps_') %}| {{ e.attributes.friendly_name | default(e.entity_id) }} | {{ e.attributes.speed_kmh | default('-') }} | {{ e.attributes.sats_used | default('-') }} | {{ (e.attributes.gps_accuracy | default(0)) | round(0) }} | {{ relative_time(e.last_updated) }} |\n{% endfor %}"
+      # Cartella file di tracking, nativa.
+      - type: markdown
+        title: "File di tracking giornalieri"
+        content: "Cartella {{ state_attr('sensor.gps_tracking_files','directory') }} - {{ states('sensor.gps_tracking_files') }} file ({{ state_attr('sensor.gps_tracking_files','total_kb') }} KB). Elenco: {{ (state_attr('sensor.gps_tracking_files','file_list') or []) | join('  |  ') }}"
