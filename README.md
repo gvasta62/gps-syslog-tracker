@@ -170,6 +170,11 @@ i messaggi syslog, valida e decodifica le frasi NMEA e fa **atterrare** il dato
 in una destinazione a scelta (**console, CSV, JSON, InfluxDB, Postgres/PostGIS,
 Home Assistant, MQTT**). Vedi [`server/README.md`](server/README.md).
 
+Per **Home Assistant OS/Supervised** c'e' anche un **add-on** pronto in
+[`homeassistant-addon/`](homeassistant-addon/): riceve i telefoni e crea i
+`device_tracker` sulla mappa, usando l'API interna del Supervisor (niente token
+esterni ne' Cloudflare).
+
 ## Compilare l'APK
 
 Il progetto e' un normale progetto **Gradle + Kotlin**, apribile in **Android

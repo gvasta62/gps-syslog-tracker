@@ -1,0 +1,35 @@
+name: GPS Syslog Collector
+version: "1.0.0"
+slug: gps_syslog_collector
+description: >-
+  Riceve i messaggi syslog NMEA inviati dall'app GPS Syslog Tracker e
+  crea/aggiorna i device_tracker in Home Assistant (mostrandoli sulla mappa).
+url: https://github.com/gvasta62/gps-syslog-tracker
+arch:
+  - aarch64
+  - amd64
+  - armv7
+  - armhf
+  - i386
+init: false
+# Consente all'add-on di usare l'API interna di HA (http://supervisor/core)
+# tramite SUPERVISOR_TOKEN: niente token a lunga durata, niente Cloudflare.
+homeassistant_api: true
+hassio_api: true
+host_network: false
+# Espone la porta syslog sull'host (poi la inoltri dal router per l'accesso da
+# rete mobile). Puoi rimappare la porta host dalla UI dell'add-on.
+ports:
+  "5514/tcp": 5514
+  "5514/udp": 5514
+ports_description:
+  "5514/tcp": Syslog TCP (RFC 5424)
+  "5514/udp": Syslog UDP (RFC 3164)
+options:
+  entity_prefix: "gps_"
+  allowed_hosts: ""
+  flush_timeout: 5.0
+schema:
+  entity_prefix: str?
+  allowed_hosts: str?
+  flush_timeout: float?
