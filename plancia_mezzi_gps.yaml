@@ -1,0 +1,31 @@
+title: "Mezzi GPS"
+views:
+  - title: "Mezzi GPS"
+    path: mezzi-gps
+    icon: mdi:bus
+    cards:
+      # Mappa: si popola da sola con tutti i device_tracker.gps_*
+      - type: custom:auto-entities
+        show_empty: true
+        card:
+          type: map
+          title: "Posizione mezzi"
+          default_zoom: 12
+          hours_to_show: 4
+        filter:
+          include:
+            - entity_id: "device_tracker.gps_*"
+      # Elenco mezzi attivi: anch'esso automatico
+      - type: custom:auto-entities
+        show_empty: true
+        sort:
+          method: name
+        card:
+          type: entities
+          title: "Mezzi attivi"
+          state_color: true
+        filter:
+          include:
+            - entity_id: "device_tracker.gps_*"
+              options:
+                secondary_info: last-changed

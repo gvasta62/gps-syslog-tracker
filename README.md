@@ -183,6 +183,32 @@ Per **Home Assistant OS/Supervised** c'e' anche un **add-on** pronto in
 `device_tracker` sulla mappa, usando l'API interna del Supervisor (niente token
 esterni ne' Cloudflare).
 
+## Modalita' Home Assistant (mappa)
+
+Quando HA e' pubblicato su internet (anche dietro Cloudflare) e il telefono e'
+su rete mobile, la via piu' semplice e' l'invio **diretto** all'API di HA.
+
+Nell'app scegli **modalita' Home Assistant** e imposta:
+
+| Campo | Valore |
+|---|---|
+| Nome host | identificativo del mezzo (es. `bus-01`) -> `device_tracker.gps_bus_01` |
+| URL di Home Assistant | es. `https://tuo-ha.esempio` (senza `/` finale) |
+| Token a lunga durata | crealo in HA: profilo -> Sicurezza -> Token (consigliato dedicato) |
+| Prefisso entita' | `gps_` (tienilo uguale su tutti i telefoni della flotta) |
+
+L'app crea/aggiorna un `device_tracker.gps_<host>` con `source_type: gps` e gli
+attributi lat/lon, quota, velocita', rotta, satelliti (fix/in vista) e `nmea`.
+
+### Plancia sulla mappa (auto-popolante)
+
+Il file `plancia_mezzi_gps.yaml` contiene una dashboard che mostra **tutti** i
+mezzi sulla mappa in automatico, filtrando `device_tracker.gps_*` con la card
+**auto-entities** (HACS). Ogni telefono con lo stesso prefisso `gps_` e un nome
+host univoco compare da solo. In HA: nuova dashboard -> editor di configurazione
+raw -> incolla il YAML. (Esiste anche una variante base senza HACS con le entita'
+elencate a mano.)
+
 ## Compilare l'APK
 
 Il progetto e' un normale progetto **Gradle + Kotlin**, apribile in **Android

@@ -72,7 +72,8 @@ Requisiti funzionali e non funzionali che hanno guidato il progetto:
 | `Prefs` | oggetto | Unica fonte di verita' per i parametri configurabili. |
 | `LocationService` | `Service` (foreground) | Orchestratore: raccoglie posizione/satelliti e invia. |
 | `NmeaBuilder` | oggetto puro | Trasforma una `Location` in frasi NMEA valide. |
-| `SyslogSender` | oggetto puro | Incapsula e trasmette via UDP/TCP. |
+| `SyslogSender` | oggetto puro | Incapsula e trasmette via UDP/TCP (modalita' Syslog). |
+| `HaSender` | oggetto puro | Invia la posizione direttamente all'API REST di Home Assistant via HTTPS (modalita' Home Assistant). |
 | `FileLogger` | oggetto | Log persistente con rotazione a 1 MB. |
 | `CrashHandler` | `UncaughtExceptionHandler` | Cattura i crash, li registra e programma il riavvio. |
 | `BootReceiver` | `BroadcastReceiver` | Riavvia il servizio dopo il boot del telefono. |
@@ -84,6 +85,24 @@ Il progetto segue il principio di **singola responsabilita'**: le classi "pure"
 in isolamento; l'unica classe che coordina il tutto e' `LocationService`.
 
 ---
+
+## 2bis. Due modalita' di invio
+
+L'app supporta due destinazioni, selezionabili nella schermata:
+
+- **Syslog** — invia le frasi NMEA a un server syslog (UDP/TCP). Richiede un
+  collector lato server per decodificarle (cartella `server/` o l'add-on HA).
+  Adatta quando il telefono raggiunge un server syslog (LAN o porta esposta).
+- **Home Assistant (HTTP)** — invia la posizione **direttamente all'API REST di
+  Home Assistant** via HTTPS: `POST {ha_url}/api/states/device_tracker.<prefix><host>`
+  con token Bearer, creando/aggiornando un `device_tracker` (sorgente `gps`,
+  attributi lat/lon, quota, velocita', rotta, satelliti e la stringa `nmea`).
+  Adatta quando HA e' pubblicato su internet (anche dietro **Cloudflare**, che
+  trasporta solo HTTP) e il telefono e' su **rete mobile**: nessun collector,
+  nessuna VPN, nessun port-forward.
+
+La logica di acquisizione della posizione e dei satelliti e' identica nelle due
+modalita'; cambia solo l'ultimo passo (invio).
 
 ## 3. Flusso dei dati (un ciclo di invio)
 
@@ -244,12 +263,16 @@ Persistiti in `SharedPreferences` (`Prefs`), modificabili dalla `MainActivity`:
 
 | Parametro | Default | Note |
 |---|---|---|
-| Nome host device | modello telefono | Campo hostname del syslog. |
-| Server (IP o URL) | `192.168.1.100` | Risoluzione DNS automatica. |
-| Porta | `514` | Porta syslog standard. |
-| Protocollo | `UDP` | `UDP` (RFC 3164) o `TCP` (RFC 5424). |
-| Intervallo | `10 s` | Minimo 1 secondo. |
-| Dettaglio satelliti (GSV) | attivo | Interruttore per includere/escludere `$GPGSV`. |
+| Modalita' invio | `Syslog` | `Syslog` oppure `Home Assistant (HTTP)`. |
+| Nome host device | modello telefono | In Syslog e' il campo hostname; in HA diventa il nome dell'entita' `device_tracker.<prefisso><host>`. |
+| Intervallo | `10 s` | Frequenza di polling. Minimo 1 secondo. |
+| *(Syslog)* Server (IP o URL) | `192.168.1.100` | Risoluzione DNS automatica. |
+| *(Syslog)* Porta | `514` | Porta syslog standard. |
+| *(Syslog)* Protocollo | `UDP` | `UDP` (RFC 3164) o `TCP` (RFC 5424). |
+| *(Syslog)* Dettaglio satelliti (GSV) | attivo | Interruttore per includere/escludere `$GPGSV`. |
+| *(HA)* URL di Home Assistant | *(vuoto)* | Es. `https://tuo-ha.esempio` (senza `/` finale). |
+| *(HA)* Token a lunga durata | *(vuoto)* | Token HA (consigliato dedicato e revocabile). |
+| *(HA)* Prefisso entita' | `gps_` | `device_tracker.<prefisso><host>`. |
 
 ---
 
