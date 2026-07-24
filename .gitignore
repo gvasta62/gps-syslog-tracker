@@ -9,3 +9,7 @@
 .externalNativeBuild
 .cxx
 build-env.sh
+
+# Python
+__pycache__/
+*.pyc
