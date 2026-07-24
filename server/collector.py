@@ -425,10 +425,12 @@ class PostgresSink:
 class HomeAssistantSink:
     """Home Assistant via REST: imposta un device_tracker con lat/lon (source_type=gps)."""
 
-    def __init__(self, base_url, token, entity_prefix="gps_"):
+    def __init__(self, base_url, token, entity_prefix="gps_", user_agent="curl/8.5.0"):
         self.base_url = base_url.rstrip("/")
         self.token = token
         self.entity_prefix = entity_prefix
+        # Alcuni reverse proxy / Cloudflare bloccano richieste senza User-Agent.
+        self.user_agent = user_agent
 
     @staticmethod
     def _slug(s):
@@ -457,9 +459,10 @@ class HomeAssistantSink:
             f"{self.base_url}/api/states/{entity}",
             data=json.dumps(payload).encode("utf-8"), method="POST",
             headers={"Authorization": f"Bearer {self.token}",
-                     "Content-Type": "application/json"},
+                     "Content-Type": "application/json",
+                     "User-Agent": self.user_agent},
         )
-        urllib.request.urlopen(req, timeout=5).read()
+        urllib.request.urlopen(req, timeout=10).read()
 
     def close(self):
         pass
@@ -548,6 +551,7 @@ def make_sink(cfg):
             cfg.get("homeassistant", "base_url", fallback="http://localhost:8123"),
             cfg.get("homeassistant", "token", fallback=""),
             cfg.get("homeassistant", "entity_prefix", fallback="gps_"),
+            cfg.get("homeassistant", "user_agent", fallback="curl/8.5.0"),
         )
     if t == "mqtt":
         return MqttSink(
