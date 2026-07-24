@@ -1,8 +1,17 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 // File di build del modulo applicazione: qui si definiscono SDK, versione,
 // opzioni di compilazione e le librerie (dipendenze) usate dall'app.
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+}
+
+// Credenziali di firma release lette da keystore.properties (fuori dal repo).
+val keystorePropsFile = rootProject.file("keystore.properties")
+val keystoreProps = Properties().apply {
+    if (keystorePropsFile.exists()) FileInputStream(keystorePropsFile).use { load(it) }
 }
 
 android {
@@ -22,6 +31,18 @@ android {
         versionName = "1.1"
     }
 
+    // Configurazione di firma per la release (attiva solo se c'e' il keystore).
+    signingConfigs {
+        create("release") {
+            if (keystorePropsFile.exists()) {
+                storeFile = rootProject.file(keystoreProps.getProperty("storeFile"))
+                storePassword = keystoreProps.getProperty("storePassword")
+                keyAlias = keystoreProps.getProperty("keyAlias")
+                keyPassword = keystoreProps.getProperty("keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         // Build di rilascio: niente offuscamento per mantenere i log leggibili.
         release {
@@ -30,6 +51,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            // Firma l'APK di release con la chiave dedicata, se disponibile.
+            if (keystorePropsFile.exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
 

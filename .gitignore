@@ -13,3 +13,7 @@ build-env.sh
 # Python
 __pycache__/
 *.pyc
+
+# Firma release (NON committare)
+*.jks
+keystore.properties
