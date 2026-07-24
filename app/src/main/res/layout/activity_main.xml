@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Schermata di configurazione. E' dentro uno ScrollView cosi' e' scorrevole
-     anche su schermi piccoli. -->
+<!-- Schermata di configurazione, scorrevole. -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,65 +18,152 @@
             android:textStyle="bold"
             android:paddingBottom="12dp" />
 
+        <!-- Comune a tutte le modalita' -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nome host del device (inizio della riga syslog):" />
+            android:text="Nome host del device:" />
         <EditText
             android:id="@+id/etHostname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:hint="es. smartphone-01" />
+            android:hint="es. bus-01" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Server syslog (IP o URL):"
-            android:paddingTop="8dp" />
-        <EditText
-            android:id="@+id/etHost"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textUri"
-            android:hint="es. 192.168.1.100" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Porta:"
-            android:paddingTop="8dp" />
-        <EditText
-            android:id="@+id/etPort"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:hint="514" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Protocollo:"
+            android:text="Modalita' di invio:"
             android:paddingTop="8dp" />
         <RadioGroup
-            android:id="@+id/rgProto"
+            android:id="@+id/rgMode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <RadioButton
-                android:id="@+id/rbUdp"
+                android:id="@+id/rbModeSyslog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="UDP (RFC 3164)"
+                android:text="Syslog"
                 android:checked="true" />
             <RadioButton
-                android:id="@+id/rbTcp"
+                android:id="@+id/rbModeHa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="16dp"
-                android:text="TCP (RFC 5424)" />
+                android:text="Home Assistant" />
         </RadioGroup>
 
+        <!-- ===== Sezione SYSLOG ===== -->
+        <LinearLayout
+            android:id="@+id/llSyslog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Server syslog (IP o URL):"
+                android:paddingTop="8dp" />
+            <EditText
+                android:id="@+id/etHost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textUri"
+                android:hint="es. 192.168.1.100" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Porta:"
+                android:paddingTop="8dp" />
+            <EditText
+                android:id="@+id/etPort"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="514" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Protocollo:"
+                android:paddingTop="8dp" />
+            <RadioGroup
+                android:id="@+id/rgProto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:id="@+id/rbUdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="UDP (RFC 3164)"
+                    android:checked="true" />
+                <RadioButton
+                    android:id="@+id/rbTcp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:text="TCP (RFC 5424)" />
+            </RadioGroup>
+
+            <CheckBox
+                android:id="@+id/cbGsv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:checked="true"
+                android:text="Invia dettaglio satelliti (frasi \$GPGSV)" />
+        </LinearLayout>
+
+        <!-- ===== Sezione HOME ASSISTANT ===== -->
+        <LinearLayout
+            android:id="@+id/llHa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="URL di Home Assistant:"
+                android:paddingTop="8dp" />
+            <EditText
+                android:id="@+id/etHaUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textUri"
+                android:hint="https://tuohomeassistant.esempio" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Token a lunga durata:"
+                android:paddingTop="8dp" />
+            <EditText
+                android:id="@+id/etHaToken"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textVisiblePassword"
+                android:hint="incolla qui il token HA" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Prefisso entita' (device_tracker.PREFISSO+host):"
+                android:paddingTop="8dp" />
+            <EditText
+                android:id="@+id/etHaPrefix"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:hint="gps_" />
+        </LinearLayout>
+
+        <!-- Comune -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -89,14 +175,6 @@
             android:layout_height="wrap_content"
             android:inputType="number"
             android:hint="10" />
-
-        <CheckBox
-            android:id="@+id/cbGsv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="8dp"
-            android:checked="true"
-            android:text="Invia dettaglio satelliti (frasi \$GPGSV)" />
 
         <Button
             android:id="@+id/btnSave"

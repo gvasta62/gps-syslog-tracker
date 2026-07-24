@@ -8,9 +8,11 @@ import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
+import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
@@ -36,6 +38,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var cbGsv: CheckBox
     private lateinit var tvStatus: TextView
 
+    private lateinit var rgMode: RadioGroup
+    private lateinit var rbModeSyslog: RadioButton
+    private lateinit var rbModeHa: RadioButton
+    private lateinit var llSyslog: LinearLayout
+    private lateinit var llHa: LinearLayout
+    private lateinit var etHaUrl: EditText
+    private lateinit var etHaToken: EditText
+    private lateinit var etHaPrefix: EditText
+
     private val REQ = 7001
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +62,16 @@ class MainActivity : AppCompatActivity() {
         rbTcp = findViewById(R.id.rbTcp)
         cbGsv = findViewById(R.id.cbGsv)
         tvStatus = findViewById(R.id.tvStatus)
+
+        rgMode = findViewById(R.id.rgMode)
+        rbModeSyslog = findViewById(R.id.rbModeSyslog)
+        rbModeHa = findViewById(R.id.rbModeHa)
+        llSyslog = findViewById(R.id.llSyslog)
+        llHa = findViewById(R.id.llHa)
+        etHaUrl = findViewById(R.id.etHaUrl)
+        etHaToken = findViewById(R.id.etHaToken)
+        etHaPrefix = findViewById(R.id.etHaPrefix)
+        rgMode.setOnCheckedChangeListener { _, _ -> updateModeVisibility() }
 
         loadPrefs()
 
@@ -91,6 +112,19 @@ class MainActivity : AppCompatActivity() {
         etInterval.setText(Prefs.getIntervalSec(this).toString())
         if (Prefs.getProto(this).equals("TCP", true)) rbTcp.isChecked = true else rbUdp.isChecked = true
         cbGsv.isChecked = Prefs.isGsvEnabled(this)
+
+        if (Prefs.getMode(this) == "ha") rbModeHa.isChecked = true else rbModeSyslog.isChecked = true
+        etHaUrl.setText(Prefs.getHaUrl(this))
+        etHaToken.setText(Prefs.getHaToken(this))
+        etHaPrefix.setText(Prefs.getHaPrefix(this))
+        updateModeVisibility()
+    }
+
+    // Mostra la sezione syslog o quella Home Assistant a seconda della modalita'.
+    private fun updateModeVisibility() {
+        val ha = rbModeHa.isChecked
+        llHa.visibility = if (ha) View.VISIBLE else View.GONE
+        llSyslog.visibility = if (ha) View.GONE else View.VISIBLE
     }
 
     private fun savePrefs() {
@@ -101,13 +135,24 @@ class MainActivity : AppCompatActivity() {
         Prefs.setIntervalSec(this, etInterval.text.toString().trim().toIntOrNull()?.coerceAtLeast(1) ?: 10)
         Prefs.setProto(this, if (rbTcp.isChecked) "TCP" else "UDP")
         Prefs.setGsvEnabled(this, cbGsv.isChecked)
+
+        Prefs.setMode(this, if (rbModeHa.isChecked) "ha" else "syslog")
+        Prefs.setHaUrl(this, etHaUrl.text.toString().trim())
+        Prefs.setHaToken(this, etHaToken.text.toString().trim())
+        Prefs.setHaPrefix(this, etHaPrefix.text.toString().trim().ifBlank { "gps_" })
     }
 
     private fun refreshStatus() {
         tvStatus.text = buildString {
             append("Stato servizio: ${if (LocationService.isRunning) "ATTIVO" else "fermo"}\n")
             append("Hostname: ${Prefs.getHostname(this@MainActivity).ifBlank { Build.MODEL ?: "android" }}\n")
-            append("Server: ${Prefs.getHost(this@MainActivity)}:${Prefs.getPort(this@MainActivity)} (${Prefs.getProto(this@MainActivity)})\n")
+            if (Prefs.getMode(this@MainActivity) == "ha") {
+                append("Modalita': Home Assistant (HTTP)\n")
+                append("HA: ${Prefs.getHaUrl(this@MainActivity)}\n")
+            } else {
+                append("Modalita': Syslog\n")
+                append("Server: ${Prefs.getHost(this@MainActivity)}:${Prefs.getPort(this@MainActivity)} (${Prefs.getProto(this@MainActivity)})\n")
+            }
             append("Intervallo: ${Prefs.getIntervalSec(this@MainActivity)} s\n")
             append("Escluso dal risparmio energetico: ${if (isIgnoringBattery()) "SI" else "NO"}\n\n")
             append("Premi 'Mostra log' per i dettagli.")

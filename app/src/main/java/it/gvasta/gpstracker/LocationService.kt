@@ -237,6 +237,14 @@ class LocationService : Service() {
             updateNotification("Nessun fix GPS ancora")
             return
         }
+        if (Prefs.getMode(this) == "ha") {
+            sendToHa(loc)
+        } else {
+            sendToSyslog(loc)
+        }
+    }
+
+    private fun sendToSyslog(loc: Location) {
         // $GPRMC + $GPGGA, e (se abilitato) le frasi $GPGSV col dettaglio satelliti.
         val sentences = if (Prefs.isGsvEnabled(this)) {
             NmeaBuilder.build(loc, satellitesInFix) + NmeaBuilder.buildGsv(satsInView)
@@ -261,6 +269,46 @@ class LocationService : Service() {
         } catch (e: Exception) {
             FileLogger.log(this, "Send", "ERRORE invio a $host:$port ($proto): ${e.message}")
             updateNotification("Errore invio: ${e.message}")
+        }
+    }
+
+    private fun sendToHa(loc: Location) {
+        val base = Prefs.getHaUrl(this)
+        val token = Prefs.getHaToken(this)
+        val prefix = Prefs.getHaPrefix(this)
+        val hostname = Prefs.getHostname(this).ifBlank { Build.MODEL ?: "android" }
+        // entity_id valido: minuscolo, solo lettere/numeri/underscore.
+        val slug = hostname.lowercase().replace(Regex("[^a-z0-9_]"), "_")
+        val entity = "device_tracker.$prefix$slug"
+
+        if (base.isBlank() || token.isBlank()) {
+            FileLogger.log(this, "Send", "Modalita' HA: URL o token mancante")
+            updateNotification("Configura URL e token di Home Assistant")
+            return
+        }
+
+        val attrs = org.json.JSONObject()
+        attrs.put("source_type", "gps")
+        attrs.put("latitude", loc.latitude)
+        attrs.put("longitude", loc.longitude)
+        attrs.put("gps_accuracy", if (loc.hasAccuracy()) loc.accuracy.toDouble() else 0.0)
+        if (loc.hasAltitude()) attrs.put("altitude", loc.altitude)
+        if (loc.hasSpeed()) attrs.put("speed_kmh", (loc.speed * 3.6).toDouble())
+        if (loc.hasBearing()) attrs.put("course", loc.bearing.toDouble())
+        attrs.put("sats_used", satellitesInFix)
+        attrs.put("sats_in_view", satsInView.size)
+        attrs.put("friendly_name", hostname)
+        // Manteniamo anche l'NMEA come attributo, per tracciabilita'.
+        attrs.put("nmea", NmeaBuilder.build(loc, satellitesInFix).joinToString(" "))
+
+        try {
+            HaSender.sendDeviceTracker(base, token, entity, attrs)
+            lastSentInfo = "%.6f, %.6f -> HA %s".format(loc.latitude, loc.longitude, entity)
+            FileLogger.log(this, "Send", "OK $lastSentInfo")
+            updateNotification(lastSentInfo)
+        } catch (e: Exception) {
+            FileLogger.log(this, "Send", "ERRORE invio a HA ($entity): ${e.message}")
+            updateNotification("Errore invio HA: ${e.message}")
         }
     }
 

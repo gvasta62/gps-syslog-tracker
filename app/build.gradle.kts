@@ -18,8 +18,8 @@ android {
         minSdk = 24
         // Versione su cui l'app dichiara di essere stata testata.
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
     }
 
     buildTypes {

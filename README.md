@@ -11,9 +11,17 @@ crash.
 - **Servizio in primo piano (foreground)** con notifica permanente: resta
   attivo anche a schermo spento.
 - **WakeLock parziale**: continua a inviare durante il Doze / risparmio energetico.
+- **Due modalita' di invio** (selezionabili nell'app):
+  - **Syslog** — frasi NMEA a un server syslog (UDP/TCP), da decodificare col
+    collector in [`server/`](server/);
+  - **Home Assistant (HTTP)** — l'app invia la posizione **direttamente all'API
+    REST di Home Assistant** via HTTPS (POST `device_tracker`), creando il mezzo
+    sulla mappa. Utile quando HA e' pubblicato su internet (anche dietro
+    Cloudflare) e il telefono e' su rete mobile: niente collector, niente VPN.
+    Richiede URL di HA + token a lunga durata.
 - **Parametri configurabili** dall'app:
-  - **Nome host del device** (finisce nel campo *hostname* del syslog, cioe'
-    all'inizio della riga, prima della frase NMEA);
+  - **Nome host del device** (in Syslog e' il campo *hostname*; in modalita' HA
+    diventa il nome dell'entita' `device_tracker.<prefisso><host>`);
   - Server syslog: **IP oppure URL** (risoluzione DNS automatica);
   - **Porta** (default 514);
   - **Protocollo**: **UDP (RFC 3164)** oppure **TCP (RFC 5424)**;

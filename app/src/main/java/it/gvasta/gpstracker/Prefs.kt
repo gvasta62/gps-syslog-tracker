@@ -38,6 +38,22 @@ object Prefs {
     fun isGsvEnabled(ctx: Context): Boolean = sp(ctx).getBoolean("gsv", true)
     fun setGsvEnabled(ctx: Context, v: Boolean) = sp(ctx).edit().putBoolean("gsv", v).apply()
 
+    // Modalita' di invio: "syslog" (server syslog) oppure "ha" (HTTP a Home Assistant).
+    fun getMode(ctx: Context): String = sp(ctx).getString("mode", "syslog") ?: "syslog"
+    fun setMode(ctx: Context, v: String) = sp(ctx).edit().putString("mode", v).apply()
+
+    // URL base di Home Assistant (es. https://peppe.shadowbreaker.ovh).
+    fun getHaUrl(ctx: Context): String = sp(ctx).getString("ha_url", "") ?: ""
+    fun setHaUrl(ctx: Context, v: String) = sp(ctx).edit().putString("ha_url", v).apply()
+
+    // Token a lunga durata di Home Assistant.
+    fun getHaToken(ctx: Context): String = sp(ctx).getString("ha_token", "") ?: ""
+    fun setHaToken(ctx: Context, v: String) = sp(ctx).edit().putString("ha_token", v).apply()
+
+    // Prefisso dell'entity_id del device_tracker (device_tracker.<prefix><hostname>).
+    fun getHaPrefix(ctx: Context): String = sp(ctx).getString("ha_prefix", "gps_") ?: "gps_"
+    fun setHaPrefix(ctx: Context, v: String) = sp(ctx).edit().putString("ha_prefix", v).apply()
+
     // "true" se il servizio deve essere attivo (usato da watchdog e boot).
     fun isEnabled(ctx: Context): Boolean = sp(ctx).getBoolean("enabled", false)
     fun setEnabled(ctx: Context, v: Boolean) = sp(ctx).edit().putBoolean("enabled", v).apply()
