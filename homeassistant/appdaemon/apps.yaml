@@ -1,0 +1,10 @@
+# Aggiungi questo blocco al tuo apps.yaml di AppDaemon
+# (di norma: /addon_configs/<slug_appdaemon>/apps/apps.yaml oppure
+#  /config/appdaemon/apps/apps.yaml a seconda dell'installazione).
+gps_daily_logger:
+  module: gps_daily_logger
+  class: GpsDailyLogger
+  # Cartella di uscita dei file (deve essere scrivibile da AppDaemon).
+  out_dir: /share/gps
+  # Prefisso delle entita' da registrare.
+  prefix: device_tracker.gps_

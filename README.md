@@ -209,6 +209,16 @@ host univoco compare da solo. In HA: nuova dashboard -> editor di configurazione
 raw -> incolla il YAML. (Esiste anche una variante base senza HACS con le entita'
 elencate a mano.)
 
+### Salvare le posizioni su file (uno per giorno)
+
+Home Assistant conserva solo l'ultima posizione (lo stato del `device_tracker`
+non cambia, cambiano solo gli attributi), quindi la traccia va registrata
+mentre arriva. L'app AppDaemon in
+[`homeassistant/appdaemon/`](homeassistant/appdaemon/) salva **ogni** posizione
+di tutti i `device_tracker.gps_*` in file giornalieri **CSV + GPX**. Il
+convertitore [`tools/convert_csv_gpx.py`](tools/convert_csv_gpx.py) rigenera un
+GPX da un CSV su qualunque PC.
+
 ## Compilare l'APK
 
 Il progetto e' un normale progetto **Gradle + Kotlin**, apribile in **Android
