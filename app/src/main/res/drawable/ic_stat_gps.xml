@@ -1,0 +1,23 @@
+<!-- Icona monocromatica per la notifica: autobus bianco con antenna.
+     Le icone di notifica devono essere bianche su trasparente: Android le
+     colora automaticamente. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="#FFFFFF">
+
+    <!-- Carrozzeria -->
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M3,11 a2,2 0 0 1 2,-2 h14 a2,2 0 0 1 2,2 v4 a2,2 0 0 1 -2,2 h-14 a2,2 0 0 1 -2,-2 z" />
+    <!-- Ruote -->
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M6,17 a1.5,1.5 0 1 0 3,0 a1.5,1.5 0 1 0 -3,0 z" />
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M15,17 a1.5,1.5 0 1 0 3,0 a1.5,1.5 0 1 0 -3,0 z" />
+    <!-- Antenna + punto GPS -->
+    <path android:fillColor="#FFFFFF" android:pathData="M11.6,3 h0.8 v6 h-0.8 z" />
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M11,2.5 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 z" />
+</vector>

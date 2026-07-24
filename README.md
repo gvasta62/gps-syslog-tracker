@@ -17,7 +17,8 @@ crash.
   - Server syslog: **IP oppure URL** (risoluzione DNS automatica);
   - **Porta** (default 514);
   - **Protocollo**: **UDP (RFC 3164)** oppure **TCP (RFC 5424)**;
-  - **Intervallo di invio** in secondi.
+  - **Intervallo di invio** in secondi (la frequenza di polling);
+  - **Dettaglio satelliti (`$GPGSV`)** attivabile/disattivabile con un interruttore.
 - **Numero di satelliti del fix** incluso nella frase `$GPGGA`, letto dal vero
   tramite `GnssStatus` (conteggio dei satelliti `usedInFix`).
 - **Posizione via `LocationManager` nativo** (GPS + rete): NON usa i servizi
@@ -38,6 +39,11 @@ crash.
 
 - Android 7.0 (API 24) o superiore.
 - "Origini sconosciute" abilitato per installare l'APK fuori dallo store.
+
+> **Per l'installazione completa e la persistenza** (permessi, esclusione
+> risparmio energetico, impostazioni per marca di telefono) vedi
+> **[`MANUALE_INSTALLAZIONE.md`](MANUALE_INSTALLAZIONE.md)**.
+> Per l'architettura interna vedi **[`ARCHITETTURA.md`](ARCHITETTURA.md)**.
 
 ## Come si usa (sul telefono)
 
